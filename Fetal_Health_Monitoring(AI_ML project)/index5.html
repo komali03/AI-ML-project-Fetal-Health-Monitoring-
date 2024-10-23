@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Forest Classification</title>
+</head>
+
+<body>
+    <h1>Random Forest Classification</h1>
+    <form id="prediction-form" action="/predict" method="post">
+        <label for="feature1">accelerations:</label>
+        <input type="number" id="accelerations" name="accelerations" required><br><br>
+        <label for="feature2">prolongued_decelerations</label>
+        <input type="number" id="prolongued_decelerations" name="prolongued_decelerations" required><br><br>
+        <label for="feature3">abnormal_short_term_variability</label>
+        <input type="number" id="abnormal_short_term_variability" name="abnormal_short_term_variability" required><br><br>
+        <label for="feature4">percentage_of_time_with_abnormal_long_term_variability</label>
+        <input type="number" id="percentage_of_time_with_abnormal_long_term_variability" name="percentage_of_time_with_abnormal_long_term_variability" required><br><br>
+        <label for="feature5">mean_value_of_long_term_variability</label>
+        <input type="number" id="mean_value_of_long_term_variability" name="mean_value_of_long_term_variability" required><br><br>
+        <label for="feature6">histogram_mode</label>
+        <input type="number" id="histogram_mode" name="histogram_mode" required><br><br>
+        <label for="feature7">histogram_median</label>
+        <input type="number" id="histogram_median" name="histogram_median" required><br><br>
+        <label for="feature8">histogram_variance</label>
+        <input type="number" id="histogram_variance" name="histogram_variance" required><br><br>
+
+        <!-- Repeat for feature2 to feature8 -->
+        <input type="submit" value="Predict">
+    </form>
+
+    <h2>Prediction Result: <span id="prediction-result"></span></h2>
+
+    <script>
+        document.getElementById('prediction-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            var feature1 = document.getElementById('accelerations').value;
+            var feature2 = document.getElementById('prolongued_decelerations').value;
+            var feature3 = document.getElementById('abnormal_short_term_variability').value;
+            var feature4 = document.getElementById('percentage_of_time_with_abnormal_long_term_variability').value;
+            var feature5 = document.getElementById('mean_value_of_long_term_variability').value;
+            var feature6 = document.getElementById('histogram_mode').value;
+            var feature7 = document.getElementById('histogram_median').value;
+            var feature8 = document.getElementById('histogram_variance').value;
+
+            // Get values for feature2 to feature8 and create a JSON object
+            var data = {
+                feature1: parseFloat(feature1),
+                feature2: parseFloat(feature2),
+                feature3: parseFloat(feature3),
+                feature4: parseFloat(feature4),
+                feature5: parseFloat(feature5),
+                feature6: parseFloat(feature6),
+                feature7: parseFloat(feature7),
+                feature8: parseFloat(feature8),
+
+                // Repeat for feature2 to feature8
+            };
+
+            fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('prediction-result').textContent = data.prediction;
+            });
+        });
+    </script>
+</body>
+
+</html>
